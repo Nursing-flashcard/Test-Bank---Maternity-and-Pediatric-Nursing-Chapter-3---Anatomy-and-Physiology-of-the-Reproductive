@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maternity & Pediatric Nursing - Chapter 3 Flashcards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2e8b57 0%, #20b2aa 100%);
+            min-height: 100vh;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            height: 95vh;
+            max-height: 95vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2e8b57, #20b2aa);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" opacity="0.1"><path d="M30,30 Q50,10 70,30 T90,50 T70,70 T50,90 T30,70 T10,50 T30,30 Z" fill="white"/></svg>');
+        }
+        
+        .header h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .header .subtitle {
+            font-size: clamp(0.8rem, 2.5vw, 1rem);
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .progress {
+            background: #1e5631;
+            height: 8px;
+            width: 100%;
+            flex-shrink: 0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #2e8b57, #20b2aa);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .flashcard {
+            padding: clamp(10px, 3vw, 20px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+        
+        .question-container {
+            display: flex;
+            gap: clamp(10px, 2vw, 15px);
+            align-items: flex-start;
+            margin-bottom: clamp(10px, 2vw, 15px);
+        }
+        
+        .question-icon {
+            background: #2e8b57;
+            color: white;
+            width: clamp(35px, 8vw, 50px);
+            height: clamp(35px, 8vw, 50px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(46, 139, 87, 0.3);
+        }
+        
+        .question {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            line-height: 1.6;
+            color: #2c3e50;
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .multiple-select-indicator {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.5vw, 10px);
+            margin-bottom: clamp(10px, 2vw, 20px);
+            flex: 1;
+        }
+        
+        .option {
+            padding: clamp(10px, 2vw, 14px) clamp(12px, 2.5vw, 18px);
+            border: 2px solid #e0f2e9;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 10px);
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .option:hover {
+            background: #f0f9f5;
+            border-color: #a8e6cf;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .option-letter {
+            background: #f0f9f5;
+            color: #2c3e50;
+            width: clamp(24px, 5vw, 28px);
+            height: clamp(24px, 5vw, 28px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+        }
+        
+        /* CORRECT - ALWAYS GREEN */
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        
+        .option.correct .option-letter {
+            background: #28a745;
+            color: white;
+        }
+        
+        /* INCORRECT - ALWAYS RED */
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .option.incorrect .option-letter {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .feedback {
+            padding: clamp(12px, 2.5vw, 16px);
+            border-radius: 12px;
+            margin-bottom: clamp(10px, 2vw, 16px);
+            display: none;
+            align-items: center;
+            gap: clamp(8px, 1.5vw, 12px);
+            font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            display: flex;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            display: flex;
+        }
+        
+        .feedback-icon {
+            font-size: clamp(1.2rem, 3vw, 1.4rem);
+            flex-shrink: 0;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: clamp(12px, 2.5vw, 16px) clamp(16px, 3vw, 24px);
+            background: #f0f9f5;
+            border-top: 1px solid #e0f2e9;
+            flex-shrink: 0;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+        
+        .btn {
+            padding: clamp(10px, 2vw, 12px) clamp(15px, 2.5vw, 20px);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1vw, 8px);
+            font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2e8b57, #20b2aa);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(46, 139, 87, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #a8e6cf, #2e8b57);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(168, 230, 207, 0.3);
+        }
+        
+        .rationale {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffd43b;
+            border-radius: 12px;
+            padding: clamp(12px, 2.5vw, 16px);
+            margin-top: clamp(8px, 1.5vw, 12px);
+            display: none;
+        }
+        
+        .rationale.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .rationale h4 {
+            color: #856404;
+            margin-bottom: clamp(6px, 1.2vw, 10px);
+            display: flex;
+            align-items: center;
+            gap: clamp(6px, 1.2vw, 8px);
+            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+        }
+        
+        .rationale p {
+            color: #856404;
+            line-height: 1.6;
+            font-size: clamp(0.8rem, 1.8vw, 0.95rem);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .stats {
+            display: flex;
+            gap: clamp(8px, 1.5vw, 15px);
+            justify-content: center;
+            margin-top: clamp(4px, 1vw, 10px);
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: clamp(5px, 1vw, 6px) clamp(8px, 1.8vw, 12px);
+            border-radius: 20px;
+            font-size: clamp(0.7rem, 1.6vw, 0.85rem);
+            white-space: nowrap;
+        }
+        
+        /* Cancel selection button */
+        .cancel-selection {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            margin: 0 auto clamp(10px, 2vw, 15px) auto;
+            display: none;
+        }
+        
+        .cancel-selection:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(231, 76, 60, 0.3);
+        }
+        
+        .cancel-selection.show {
+            display: flex;
+        }
+        
+        /* Study mode controls */
+        .study-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .study-btn {
+            padding: 8px 16px;
+            border: 2px solid #2e8b57;
+            background: white;
+            color: #2e8b57;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .study-btn.active {
+            background: #2e8b57;
+            color: white;
+        }
+        
+        .study-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 139, 87, 0.2);
+        }
+        
+        /* Multiple select instructions */
+        .multiple-select-instructions {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .score-display {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👶 Maternity & Pediatric Nursing - Chapter 3</h1>
+            <div class="subtitle">Anatomy and Physiology of the Reproductive System | 22 Questions</div>
+            <div class="stats">
+                <div class="stat">📚 Test Bank Questions</div>
+                <div class="stat">🎯 Detailed Rationales</div>
+                <div class="stat">🔢 2 Multiple-Answer Questions</div>
+                <div class="stat">↩️ Cancel Wrong Answers</div>
+            </div>
+            <div class="score-display" id="scoreDisplay">Score: 0/22</div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="flashcard">
+            <div class="study-controls">
+                <button class="study-btn active" id="allQuestionsBtn" onclick="setStudyMode('all')">All Questions</button>
+                <button class="study-btn" id="multipleSelectBtn" onclick="setStudyMode('multiple')">Multiple-Select Only</button>
+                <button class="study-btn" id="singleSelectBtn" onclick="setStudyMode('single')">Single-Select Only</button>
+                <button class="study-btn" id="incorrectBtn" onclick="setStudyMode('incorrect')">Review Incorrect</button>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-icon">?</div>
+                <div class="question" id="question"></div>
+                <div class="multiple-select-indicator" id="multipleSelectIndicator" style="display: none;">Multiple Answers</div>
+            </div>
+            
+            <div class="multiple-select-instructions" id="multipleSelectInstructions" style="display: none;">
+                💡 Select ALL correct answers - This question has multiple correct options
+            </div>
+            
+            <div class="options" id="options"></div>
+            
+            <!-- Cancel Selection Button - Only shows for wrong answers -->
+            <button class="btn cancel-selection" id="cancelBtn" onclick="cancelSelection()">
+                ↩️ Cancel Selection
+            </button>
+            
+            <div class="feedback" id="feedback">
+                <div class="feedback-icon" id="feedbackIcon"></div>
+                <div id="feedbackText"></div>
+            </div>
+            <div class="rationale" id="rationale">
+                <h4>💡 Rationale:</h4>
+                <p id="rationaleText"></p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousCard()">
+                ⬅️ Previous
+            </button>
+            <div class="counter" id="counter">1/22</div>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextCard()">
+                Next ➡️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. When describing the menstrual cycle to a group of young women, the nurse explains that estrogen levels are highest during which phase of the endometrial cycle?",
+                options: [
+                    "Menstrual",
+                    "Proliferative",
+                    "Secretory",
+                    "Ischemic"
+                ],
+                correct: 1,
+                rationale: "Estrogen levels peak during the proliferative phase (days 6-14) to stimulate endometrial growth and thickening. During the menstrual phase, estrogen is low. In the secretory phase, progesterone is dominant. The ischemic phase precedes menstruation."
+            },
+            {
+                question: "2. After teaching a group of adolescent girls about female reproductive development, the nurse determines that teaching was successful when the girls state that menarche is defined as a woman's first:",
+                options: [
+                    "Sexual experience",
+                    "Full hormonal cycle",
+                    "Menstrual period",
+                    "Sign of breast development"
+                ],
+                correct: 2,
+                rationale: "Menarche refers specifically to the first menstrual period, typically occurring between ages 10-16. This is a key milestone in female pubertal development, marking the beginning of reproductive capability."
+            },
+            {
+                question: "3. A client with a 28-day cycle reports that she ovulated on May 10. The nurse would expect the client's next menses to begin on:",
+                options: [
+                    "May 24",
+                    "May 26",
+                    "May 30",
+                    "June 1"
+                ],
+                correct: 0,
+                rationale: "In a typical 28-day menstrual cycle, ovulation occurs around day 14. Menstruation follows approximately 14 days after ovulation. May 10 + 14 days = May 24 for next menses."
+            },
+            {
+                question: "4. Which female reproductive tract structure would the nurse describe to a group of young women as containing rugae that enable it to dilate during labor and birth?",
+                options: [
+                    "Cervix",
+                    "Fallopian tube",
+                    "Vagina",
+                    "Vulva"
+                ],
+                correct: 2,
+                rationale: "The vagina contains transverse folds called rugae that allow for significant stretching and dilation during childbirth. The cervix also dilates but doesn't have rugae. Fallopian tubes transport ova, and vulva refers to external genitalia."
+            },
+            {
+                question: "5. After teaching a group of pregnant women about breast-feeding, the nurse determines that the teaching was successful when the group identifies which hormone as important for the production of breast milk after childbirth?",
+                options: [
+                    "Placental estrogen",
+                    "Progesterone",
+                    "Gonadotropin-releasing hormone",
+                    "Prolactin"
+                ],
+                correct: 3,
+                rationale: "Prolactin is the primary hormone responsible for milk production (lactogenesis). Estrogen and progesterone levels drop after delivery, allowing prolactin to stimulate milk production. GnRH regulates the menstrual cycle."
+            },
+            {
+                question: "6. The nurse is assessing a 13-year-old girl who has had her first menses. Which of the following events would the nurse expect to have occurred first?",
+                options: [
+                    "Evidence of pubic hair",
+                    "Development of breast buds",
+                    "Onset of menses",
+                    "Growth spurt"
+                ],
+                correct: 1,
+                rationale: "Breast bud development (thelarche) is typically the first sign of puberty in girls, occurring around age 8-13. Pubic hair growth usually follows breast development. Menarche occurs about 2 years after breast budding begins."
+            },
+            {
+                question: "7. When describing the ovarian cycle to a group of students, which phase would the instructor include?",
+                options: [
+                    "Luteal phase",
+                    "Proliferative phase",
+                    "Menstrual phase",
+                    "Secretory phase"
+                ],
+                correct: 0,
+                rationale: "The ovarian cycle includes the follicular phase (days 1-14) and luteal phase (days 15-28). The proliferative, secretory, and menstrual phases refer to the endometrial cycle, not the ovarian cycle."
+            },
+            {
+                question: "8. The nurse is explaining the events that lead up to ovulation. Which hormone would the nurse identify as being primarily responsible for ovulation?",
+                options: [
+                    "Estrogen",
+                    "Progesterone",
+                    "Follicle-stimulating hormone",
+                    "Luteinizing hormone"
+                ],
+                correct: 3,
+                rationale: "The LH surge triggers ovulation. FSH stimulates follicle growth. Estrogen helps build the endometrium, and progesterone maintains it after ovulation. The LH surge causes the mature follicle to rupture and release the ovum."
+            },
+            {
+                question: "9. The nurse is teaching a health education class on male reproductive anatomy and asks the students to identify the site of sperm production. Which structure, if identified by the group, would indicate to the nurse that the teaching was successful?",
+                options: [
+                    "Testes",
+                    "Seminal vesicles",
+                    "Scrotum",
+                    "Prostate gland"
+                ],
+                correct: 0,
+                rationale: "Spermatogenesis occurs in the seminiferous tubules of the testes. The seminal vesicles produce seminal fluid. The scrotum houses and protects the testes. The prostate gland produces prostatic fluid."
+            },
+            {
+                question: "10. The nurse is creating a diagram that illustrates the components of the male reproductive system. Which structure would be inappropriate for the nurse to include as an accessory gland?",
+                options: [
+                    "Seminal vesicles",
+                    "Prostate gland",
+                    "Cowper's glands",
+                    "Vas deferens"
+                ],
+                correct: 3,
+                rationale: "The vas deferens is a duct that transports sperm, not an accessory gland. Accessory glands include the seminal vesicles, prostate gland, and bulbourethral (Cowper's) glands, which all produce fluids that combine with sperm to form semen."
+            },
+            {
+                question: "11. The nurse is preparing an outline for a class on the physiology of the male sexual response. Which event would the nurse identify as occurring first?",
+                options: [
+                    "Sperm emission",
+                    "Penile vasodilation",
+                    "Psychological release",
+                    "Ejaculation"
+                ],
+                correct: 1,
+                rationale: "Penile vasodilation (erection) occurs first in the male sexual response, triggered by parasympathetic stimulation. This is followed by emission (movement of sperm/fluid into urethra) and then ejaculation (forceful expulsion)."
+            },
+            {
+                question: "12. A woman comes to the clinic complaining that she has little sexual desire. As part of the client's evaluation, the nurse would anticipate the need to evaluate which hormone level?",
+                options: [
+                    "Progesterone",
+                    "Estrogen",
+                    "Gonadotropin-releasing hormone",
+                    "Testosterone"
+                ],
+                correct: 3,
+                rationale: "Testosterone plays a significant role in female libido (sexual desire). While often thought of as a male hormone, women produce testosterone in smaller amounts from the ovaries and adrenal glands, influencing sexual desire."
+            },
+            {
+                question: "13. A nurse is conducting a class for a group of teenage girls about female reproductive anatomy and physiology. Which of the following would the nurse include as an external female reproductive organ? Select all that apply.",
+                options: [
+                    "Mons pubis",
+                    "Labia",
+                    "Vagina",
+                    "Clitoris",
+                    "Uterus"
+                ],
+                correct: [0, 1, 3],
+                rationale: "External female reproductive organs (vulva) include mons pubis, labia majora/minora, clitoris, vestibular structures, and vaginal opening. The vagina and uterus are internal reproductive organs."
+            },
+            {
+                question: "14. When describing the hormones involved in the menstrual cycle, a nurse identifies which hormone as responsible for initiating the cycle?",
+                options: [
+                    "Estrogen",
+                    "Luteinizing hormone",
+                    "Progesterone",
+                    "Prolactin"
+                ],
+                correct: 0,
+                rationale: "At the beginning of the menstrual cycle, low estrogen and progesterone levels signal the hypothalamus to release GnRH, which stimulates the anterior pituitary to release FSH, initiating follicle development and the new cycle."
+            },
+            {
+                question: "15. A nursing instructor is describing the hormones involved in the menstrual cycle to a group of nursing students. The instructor determines the teaching was successful when the students identify follicle-stimulating hormone as being secreted by which of the following?",
+                options: [
+                    "Hypothalamus",
+                    "Anterior pituitary gland",
+                    "Ovaries",
+                    "Corpus luteum"
+                ],
+                correct: 1,
+                rationale: "FSH is secreted by the anterior pituitary gland in response to GnRH from the hypothalamus. FSH stimulates follicle development in the ovaries. The corpus luteum produces progesterone."
+            },
+            {
+                question: "16. A woman comes to the clinic for an evaluation. During the visit, the woman tells the nurse that her menstrual cycles have become irregular. 'I've also been waking up at night feeling really hot and sweating.' The nurse interprets these findings as which of the following?",
+                options: [
+                    "Menopause",
+                    "Perimenopause",
+                    "Climacteric",
+                    "Menarche"
+                ],
+                correct: 1,
+                rationale: "Perimenopause refers to the transition period before menopause when menstrual cycles become irregular and vasomotor symptoms (hot flashes, night sweats) appear. Menopause is diagnosed after 12 consecutive months without menstruation."
+            },
+            {
+                question: "17. After teaching a group of students about female reproductive anatomy, the instructor determines that the teaching was successful when the students identify which of the following as the site of fertilization?",
+                options: [
+                    "Vagina",
+                    "Uterus",
+                    "Fallopian tubes",
+                    "Vestibule"
+                ],
+                correct: 2,
+                rationale: "Fertilization typically occurs in the ampulla of the fallopian tube. Sperm travel through the vagina and uterus to reach the fallopian tubes where they may encounter an ovum. The fertilized egg then travels to the uterus for implantation."
+            },
+            {
+                question: "18. A woman comes to the clinic complaining of a vaginal discharge. The nurse suspects that the client has an infection. When gathering additional information, which of the following would the nurse be least likely to identify as placing the client at risk for an infection?",
+                options: [
+                    "Recent antibiotic therapy for an upper respiratory infection",
+                    "Last menstrual period about 5 days ago.",
+                    "Weekly douching",
+                    "Frequent use of feminine hygiene sprays."
+                ],
+                correct: 1,
+                rationale: "Antibiotics can disrupt normal vaginal flora. Douching and feminine hygiene sprays can irritate and alter pH. A normal menstrual period 5 days ago is not typically a risk factor for infection; in fact, menstrual blood can have antibacterial properties."
+            },
+            {
+                question: "19. A group of nursing students are reviewing information about the male reproductive structures. The students demonstrate understanding of the information when they identify which of the following as accessory organs? (Select all that apply.)",
+                options: [
+                    "Testes",
+                    "Vas deferens",
+                    "Bulbourethral glands",
+                    "Prostate gland",
+                    "Penis"
+                ],
+                correct: [2, 3],
+                rationale: "Accessory glands/organs in the male reproductive system include the seminal vesicles, prostate gland, and bulbourethral glands (Cowper's glands). The testes are primary sex organs. The vas deferens is a duct, and the penis is an external organ."
+            },
+            {
+                question: "20. A nurse is examining a female client and tests the client's vaginal pH. Which finding would the nurse interpret as normal?",
+                options: [
+                    "4.5",
+                    "7",
+                    "8.5",
+                    "10"
+                ],
+                correct: 0,
+                rationale: "Normal vaginal pH in reproductive-age women is acidic, typically 3.8-4.5. This acidity is maintained by lactobacilli and helps prevent pathogenic bacterial growth. Alkaline pH may indicate infection or other conditions."
+            },
+            {
+                question: "21. When describing the male sexual response to a group of students, the instructor determines that the teaching was successful when they identify emission as which of the following?",
+                options: [
+                    "Semen forced through the urethra to the outside",
+                    "Movement of sperm from the testes and fluid into the urethras",
+                    "Dilation of the penile arteries with increased blood flow to the tissues.",
+                    "Body's return to the physiologic nonstimulated state"
+                ],
+                correct: 1,
+                rationale: "Emission refers to the movement of sperm from the epididymis and secretions from accessory glands into the urethra. Ejaculation is the forceful expulsion of semen through the urethra. Erection involves vasodilation, and resolution is return to baseline."
+            },
+            {
+                question: "22. A nurse is describing the structure and function of the reproductive system to an adolescent health class. The nurse describes the secretion of the seminal vesicles as which of the following?",
+                options: [
+                    "Mucus-like",
+                    "Alkaline",
+                    "Acidic",
+                    "Semen"
+                ],
+                correct: 1,
+                rationale: "Seminal vesicle fluid is alkaline (pH about 7.2-7.8), which helps neutralize the acidic environment of the male urethra and female vagina, protecting sperm and enhancing motility. The fluid contains fructose to nourish sperm."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let selectedOption = null;
+        let score = 0;
+        let answers = Array(questions.length).fill(null);
+        let incorrectQuestions = [];
+        let studyMode = 'all'; // 'all', 'multiple', 'single', 'incorrect'
+        let filteredQuestions = [...questions];
+
+        function updateScoreDisplay() {
+            const correctCount = questions.reduce((count, question, index) => {
+                if (answers[index] === null || answers[index] === undefined) return count;
+                
+                if (Array.isArray(question.correct)) {
+                    const selected = answers[index] || [];
+                    const allCorrect = question.correct.every(c => selected.includes(c));
+                    const noIncorrect = selected.every(s => question.correct.includes(s));
+                    return allCorrect && noIncorrect ? count + 1 : count;
+                } else {
+                    return answers[index] === question.correct ? count + 1 : count;
+                }
+            }, 0);
+            
+            document.getElementById('scoreDisplay').textContent = `Score: ${correctCount}/${questions.length}`;
+            return correctCount;
+        }
+
+        function setStudyMode(mode) {
+            studyMode = mode;
+            
+            // Update button states
+            document.querySelectorAll('.study-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(mode + 'Btn').classList.add('active');
+            
+            // Filter questions based on mode
+            switch(mode) {
+                case 'all':
+                    filteredQuestions = [...questions];
+                    break;
+                case 'multiple':
+                    filteredQuestions = questions.filter(q => Array.isArray(q.correct) && q.correct.length > 1);
+                    break;
+                case 'single':
+                    filteredQuestions = questions.filter(q => !Array.isArray(q.correct) || q.correct.length === 1);
+                    break;
+                case 'incorrect':
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    if (filteredQuestions.length === 0) {
+                        alert('No incorrect questions to review yet!');
+                        filteredQuestions = [...questions];
+                    }
+                    break;
+            }
+            
+            currentQuestion = 0;
+            loadQuestion();
+        }
+
+        function isMultipleSelectQuestion(question) {
+            return Array.isArray(question.correct) && question.correct.length > 1;
+        }
+
+        function loadQuestion() {
+            if (filteredQuestions.length === 0) {
+                document.getElementById('question').textContent = "No questions available for the selected study mode.";
+                document.getElementById('options').innerHTML = '';
+                document.getElementById('counter').textContent = `0/0`;
+                return;
+            }
+
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('counter').textContent = `${currentQuestion + 1}/${filteredQuestions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / filteredQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Show/hide multiple select indicators
+            const isMultiple = isMultipleSelectQuestion(question);
+            document.getElementById('multipleSelectIndicator').style.display = isMultiple ? 'block' : 'none';
+            document.getElementById('multipleSelectInstructions').style.display = isMultiple ? 'block' : 'none';
+            
+            // Load options
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${String.fromCharCode(65 + index)}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                optionElement.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset feedback and rationale
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').className = 'rationale';
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === filteredQuestions.length - 1 ? 'Finish ➡️' : 'Next ➡️';
+            
+            // Check if we have a stored answer for this question
+            const storedAnswer = answers[originalIndex];
+            document.getElementById('nextBtn').disabled = storedAnswer === null || storedAnswer === undefined;
+            
+            // Reset cancel button visibility
+            document.getElementById('cancelBtn').classList.remove('show');
+            
+            // If this question was already answered, show the answer
+            if (storedAnswer !== null && storedAnswer !== undefined) {
+                if (Array.isArray(storedAnswer)) {
+                    // Multiple selection question
+                    storedAnswer.forEach(index => {
+                        selectOption(index, true);
+                    });
+                } else {
+                    // Single selection question
+                    selectOption(storedAnswer, true);
+                }
+            }
+            
+            // Update score display
+            updateScoreDisplay();
+        }
+
+        function selectOption(index, fromMemory = false) {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            // Check if this is a multiple selection question
+            if (isMultipleSelectQuestion(question)) {
+                // Multiple selection logic
+                if (!fromMemory) {
+                    if (!answers[originalIndex]) {
+                        answers[originalIndex] = [];
+                    }
+                    
+                    const optionIndex = answers[originalIndex].indexOf(index);
+                    if (optionIndex === -1) {
+                        answers[originalIndex].push(index);
+                    } else {
+                        answers[originalIndex].splice(optionIndex, 1);
+                    }
+                }
+                
+                highlightSelectedOptions();
+                showFeedbackForMultiple();
+                
+                // Enable next button if at least one option is selected
+                document.getElementById('nextBtn').disabled = !answers[originalIndex] || answers[originalIndex].length === 0;
+                updateScoreDisplay();
+                return;
+            }
+            
+            // Single selection logic
+            if (selectedOption !== null && !fromMemory) return;
+            
+            if (!fromMemory) {
+                selectedOption = index;
+                answers[originalIndex] = index;
+            }
+            
+            highlightSelectedOption(index);
+            showFeedback(index);
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+            updateScoreDisplay();
+        }
+
+        function highlightSelectedOption(index) {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            options.forEach((option, i) => {
+                option.classList.remove('correct', 'incorrect');
+                
+                if (i === index) {
+                    // ALWAYS show correct answers in GREEN
+                    if (i === question.correct) {
+                        option.classList.add('correct');
+                        if (!answers[originalIndex]) score++;
+                        document.getElementById('cancelBtn').classList.remove('show');
+                        
+                        // Remove from incorrect questions if it was there
+                        const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                        if (incorrectIndex > -1) {
+                            incorrectQuestions.splice(incorrectIndex, 1);
+                        }
+                    } else {
+                        // ALWAYS show incorrect answers in RED
+                        option.classList.add('incorrect');
+                        // Also highlight the correct answer in GREEN
+                        options[question.correct].classList.add('correct');
+                        document.getElementById('cancelBtn').classList.add('show');
+                        
+                        // Add to incorrect questions
+                        if (!incorrectQuestions.includes(originalIndex)) {
+                            incorrectQuestions.push(originalIndex);
+                        }
+                    }
+                }
+            });
+        }
+
+        function highlightSelectedOptions() {
+            const options = document.querySelectorAll('.option');
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const selectedIndices = answers[originalIndex] || [];
+            
+            // First, highlight ALL correct answers in GREEN
+            question.correct.forEach(correctIndex => {
+                options[correctIndex].classList.add('correct');
+            });
+            
+            // Then, highlight selected options
+            options.forEach((option, i) => {
+                if (selectedIndices.includes(i)) {
+                    // If selected but incorrect, highlight in RED
+                    if (!question.correct.includes(i)) {
+                        option.classList.add('incorrect');
+                    }
+                }
+            });
+            
+            // Check if answer is correct and update score/tracking
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                if (!answers[originalIndex]) score++;
+                // Remove from incorrect questions
+                const incorrectIndex = incorrectQuestions.indexOf(originalIndex);
+                if (incorrectIndex > -1) {
+                    incorrectQuestions.splice(incorrectIndex, 1);
+                }
+            } else {
+                // Add to incorrect questions
+                if (!incorrectQuestions.includes(originalIndex)) {
+                    incorrectQuestions.push(originalIndex);
+                }
+            }
+        }
+
+        function cancelSelection() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            
+            selectedOption = null;
+            answers[originalIndex] = null;
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.classList.remove('correct', 'incorrect');
+            });
+            
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('rationale').classList.remove('show');
+            document.getElementById('cancelBtn').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+            
+            // Update score display
+            updateScoreDisplay();
+        }
+
+        function showFeedback(index) {
+            const question = filteredQuestions[currentQuestion];
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            if (index === question.correct) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! Well done.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                feedbackText.textContent = `Incorrect. The right answer is: ${String.fromCharCode(65 + question.correct)}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function showFeedbackForMultiple() {
+            const question = filteredQuestions[currentQuestion];
+            const originalIndex = questions.indexOf(question);
+            const feedback = document.getElementById('feedback');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackText = document.getElementById('feedbackText');
+            const rationale = document.getElementById('rationale');
+            const rationaleText = document.getElementById('rationaleText');
+            
+            const selectedIndices = answers[originalIndex] || [];
+            const allCorrectSelected = question.correct.every(c => selectedIndices.includes(c));
+            const noIncorrectSelected = selectedIndices.every(s => question.correct.includes(s));
+            
+            if (allCorrectSelected && noIncorrectSelected) {
+                feedback.className = 'feedback correct';
+                feedbackIcon.textContent = '✅';
+                feedbackText.textContent = 'Correct! All right answers selected.';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedbackIcon.textContent = '❌';
+                const correctLetters = question.correct.map(c => String.fromCharCode(65 + c)).join(', ');
+                feedbackText.textContent = `Incorrect. The right answers are: ${correctLetters}`;
+            }
+            
+            feedback.style.display = 'flex';
+            rationaleText.textContent = question.rationale;
+            rationale.classList.add('show');
+        }
+
+        function nextCard() {
+            if (currentQuestion < filteredQuestions.length - 1) {
+                currentQuestion++;
+                selectedOption = null;
+                loadQuestion();
+            } else {
+                const correctCount = updateScoreDisplay();
+                
+                alert(`Quiz completed! Your score: ${correctCount}/${questions.length}\nIncorrect questions: ${incorrectQuestions.length}`);
+                
+                if (studyMode === 'incorrect' && incorrectQuestions.length > 0) {
+                    // Continue with incorrect questions
+                    filteredQuestions = questions.filter((_, index) => incorrectQuestions.includes(index));
+                    currentQuestion = 0;
+                    loadQuestion();
+                } else {
+                    // Reset to all questions
+                    currentQuestion = 0;
+                    selectedOption = null;
+                    score = 0;
+                    answers = Array(questions.length).fill(null);
+                    filteredQuestions = [...questions];
+                    setStudyMode('all');
+                }
+            }
+        }
+
+        function previousCard() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                const question = filteredQuestions[currentQuestion];
+                const originalIndex = questions.indexOf(question);
+                selectedOption = answers[originalIndex];
+                loadQuestion();
+            }
+        }
+
+        // Initialize the app
+        loadQuestion();
+    </script>
+</body>
+</html>
